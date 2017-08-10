@@ -1,0 +1,52 @@
+
+
+.tweet.module {
+  border-radius: 10px;
+  margin: 20px;
+  border: solid 1px #78C0E0;
+}
+
+
+.module-header {
+  position: relative;
+  border-radius: 10px 10px 0 0;
+  background-color: #78C0E0;
+}
+
+.tweet-avatar {
+  padding-top: 6px;
+  padding-left: 8px;
+  border-radius: 5px;
+
+}
+
+.tweet-name.module-title {
+  font-size: 130%;
+
+}
+
+.tweet-handle {
+  position: absolute;
+  bottom: 2px;
+  right: 5px;
+}
+
+.module-footer {
+  background-color: #78C0E0;
+  border-radius: 0 0 10px 10px;
+  padding: 8px;
+}
+
+.tweet-actions {
+  float: right;
+  visibility: hidden;
+}
+
+.tweet:hover .tweet-actions{
+  visibility: visible;
+}
+
+.tweet-text {
+  padding: 10px;
+}
+
