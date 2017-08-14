@@ -6,15 +6,6 @@
 
 // Fake data taken from tweets.json
 $(function () {
-
-  function renderTweets(tweets) {
-    $(".tweets").empty();                     //emptying "tweets" class
-    tweets.forEach(function (tweet) {         //going through each tweets submitted
-      var aTweet = createTweetElement(tweet); //creating aTweet via createTweetElement function
-      $(".tweets").prepend(aTweet);           //posting aTweet (new Tweet) under "tweets" html class
-    });
-  }
-
   //preventing xss with an escape function
   function escape(str) {
     var div = document.createElement('div');
@@ -22,11 +13,9 @@ $(function () {
     return div.innerHTML;
   }
 
-
-
   //creating new tweet according to html format below
   function createTweetElement(tweet) {
-      return `
+    return `
           <article class="tweet module">
             <header class="module-header">
               <img class="tweet-avatar" src=${tweet.user.avatars.small}>
@@ -46,44 +35,52 @@ $(function () {
             </footer>
           </article>
       `;
-  };
+  }
+
+  function renderTweets(tweets) {
+    $(".tweets").empty();                     //emptying "tweets" class
+    tweets.forEach(function (tweet) {         //going through each tweets submitted
+      var aTweet = createTweetElement(tweet); //creating aTweet via createTweetElement function
+      $(".tweets").prepend(aTweet);           //posting aTweet (new Tweet) under "tweets" html class
+    });
+  }
 
   // fetching tweets from /tweets page
   function loadTweets() {
-    $.getJSON('/tweets', renderTweets)          //handling JSON response from '/tweets' and rendering it to the page
+    $.getJSON('/tweets', renderTweets);          //handling JSON response from '/tweets' and rendering it to the page
   }
 
   $("form").submit(function (event) {
-      event.preventDefault();                   //stopping defalut submit button that refreshes the page
+    event.preventDefault();                   //stopping defalut submit button that refreshes the page
 
-      let input = $(this).find('textarea').val().length;     //finding 'this' form's textarea's length
+    let input = $(this).find('textarea').val().length;     //finding 'this' form's textarea's length
 
-      if (input === 0) {
-        alert("uh oh, you didn't tweet anything! Please try again");
-        return
-      };
+    if (input === 0) {
+      alert("uh oh, you didn't tweet anything! Please try again");
+      return;
+    }
 
-      if (input > 140) {
-        alert("uh oh, your tweet is too long!");
-        return
-      }
+    if (input > 140) {
+      alert("uh oh, your tweet is too long!");
+      return;
+    }
 
-      const form = this;    const counter = $(this).closest('form').find('.counter');
+    const form = this;    const counter = $(this).closest('form').find('.counter');
 
 
-      $.ajax({                                  //using ajax to post new tweet from the data it gets from /tweets
-        url: '/tweets',
-        method: 'post',
-        data: $(form).serialize()               //turning data into query string that gets included to POST request body
-      }).done(function () {
-        form.reset();                           //after its done, the form resets.
-        $(".counter").text(140);                //after submit, counter goes back to 140
-        loadTweets();                           //after submit button is pressed, it loads the tweets to the page.
-      });
-
+    $.ajax({                                  //using ajax to post new tweet from the data it gets from /tweets
+      url: '/tweets',
+      method: 'post',
+      data: $(form).serialize()               //turning data into query string that gets included to POST request body
+    }).done(function () {
+      form.reset();                           //after its done, the form resets.
+      $(".counter").text(140);                //after submit, counter goes back to 140
+      loadTweets();                           //after submit button is pressed, it loads the tweets to the page.
     });
 
-    loadTweets();   //after submit button is pressed, it loads the tweets to the page.
+  });
+
+  loadTweets();   //after submit button is pressed, it loads the tweets to the page.
 
   $(".compose").click(function() {
     $(".new-tweet").slideToggle("slow", function() {
